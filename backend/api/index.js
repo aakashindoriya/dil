@@ -6,8 +6,10 @@ const userRoute=require("./routes/user.route")
 const productRoute=require("./routes/product.route")
 const cartRoute=require("./routes/cart.route")
 const wishlistRoute=require("./routes/wishlist.route")
+const paymentRoute=require("./routes/payment.route")
 const app=express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 app.get("/",(req,res)=>{
@@ -22,7 +24,7 @@ app.use("/user",userRoute)
 app.use("/product",productRoute)
 app.use("/cart",cartRoute)
 app.use("/wishlist",wishlistRoute)
-
+app.use("/payment",paymentRoute)
 app.listen(process.env.PORT,async()=>{
     await connect()
     console.log("server is running on ",process.env.PORT )

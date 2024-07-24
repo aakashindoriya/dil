@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Text, Flex, IconButton, useToast, Spinner, Skeleton } from '@chakra-ui/react';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import { getCart,  deleteItem } from '../redux/actions/cart.action';
+import { checkoutHandler } from '../redux/actions/payment.action';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ const Cart = () => {
           </Flex>
         ))
       )}
+      <Flex align="center" justify="space-between" p={5} mt={5}>
+        <Text>Total: ${items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)}</Text>
+        <Button colorScheme="blue" disabled={items.length === 0} onClick={checkoutHandler}>Checkout</Button>
+      </Flex>
     </Box>
   );
 };
