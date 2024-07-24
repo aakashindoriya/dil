@@ -2,8 +2,29 @@
 const Product = require('../models/product.model');
 
 exports.getAllProducts = async (req, res) => {
-  const products = await Product.find();
-  res.send(products);
+  const { search, page = 1 } = req.query;
+  const limit = 20;
+  const skip = (page - 1) * limit;
+
+  try {
+      const query = search ? { name: { $regex: search, $options: 'i' } } : {};
+
+      const products = await Product.find(query)
+          .skip(skip)
+          .limit(limit);
+
+      const total = await Product.countDocuments(query);
+
+      res.status(200).send({
+          products,
+          total,
+          page: Number(page),
+          pages: Math.ceil(total / limit)
+      });
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
 };
 
 exports.getProductById = async (req, res) => {
